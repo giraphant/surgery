@@ -20,13 +20,13 @@ type ExtensionPreferences = {
 declare type Preferences = ExtensionPreferences
 
 declare namespace Preferences {
-  /** Preferences accessible in the `merge-config` command */
-  export type MergeConfig = ExtensionPreferences & {}
+  /** Preferences accessible in the `merge` command */
+  export type Merge = ExtensionPreferences & {}
 }
 
 declare namespace Arguments {
-  /** Arguments passed to the `merge-config` command */
-  export type MergeConfig = {}
+  /** Arguments passed to the `merge` command */
+  export type Merge = {}
 }
 
 
