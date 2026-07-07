@@ -1,13 +1,30 @@
-import { Entry, MergeResult, Section, SectionChange, SurgeConfig } from "./types";
-import { getSection, parseConfig, serializeConfig, getProxyNames } from "./parser";
+import {
+  Entry,
+  MergeResult,
+  Section,
+  SectionChange,
+  SurgeConfig,
+} from "./types";
+import { getSection, serializeConfig, getProxyNames } from "./parser";
 
 // Sections that should be synced from base config
-const SYNCABLE_SECTIONS = ["Proxy", "Proxy Group", "Rule", "URL Rewrite", "Script", "Panel", "Host"];
+const SYNCABLE_SECTIONS = [
+  "Proxy",
+  "Proxy Group",
+  "Rule",
+  "URL Rewrite",
+  "Script",
+  "Panel",
+  "Host",
+];
 
 // Special entries in [Proxy] that should always be preserved
 const PRESERVED_PROXY_NAMES = ["Direct", "Block"];
 
-export function mergeConfigs(baseConfig: SurgeConfig, modConfig: SurgeConfig): MergeResult {
+export function mergeConfigs(
+  baseConfig: SurgeConfig,
+  modConfig: SurgeConfig,
+): MergeResult {
   const changes: SectionChange[] = [];
   const resultSections: Section[] = [];
 
@@ -58,7 +75,10 @@ export function mergeConfigs(baseConfig: SurgeConfig, modConfig: SurgeConfig): M
   };
 }
 
-function mergeSection(modSection: Section, baseSection: Section): { mergedSection: Section; change: SectionChange } {
+function mergeSection(
+  modSection: Section,
+  baseSection: Section,
+): { mergedSection: Section; change: SectionChange } {
   if (modSection.name === "Proxy") {
     return mergeProxySection(modSection, baseSection);
   } else if (modSection.name === "Proxy Group") {
@@ -68,7 +88,10 @@ function mergeSection(modSection: Section, baseSection: Section): { mergedSectio
   }
 }
 
-function mergeProxySection(modSection: Section, baseSection: Section): { mergedSection: Section; change: SectionChange } {
+function mergeProxySection(
+  modSection: Section,
+  baseSection: Section,
+): { mergedSection: Section; change: SectionChange } {
   const result: Entry[] = [];
   let added = 0;
   let removed = 0;
@@ -76,7 +99,10 @@ function mergeProxySection(modSection: Section, baseSection: Section): { mergedS
 
   // 1. First, add preserved entries (Direct, Block) from mod
   for (const entry of modSection.entries) {
-    if (entry.type === "entry" && PRESERVED_PROXY_NAMES.includes(entry.name || "")) {
+    if (
+      entry.type === "entry" &&
+      PRESERVED_PROXY_NAMES.includes(entry.name || "")
+    ) {
       result.push(entry);
       unchanged++;
     }
@@ -113,7 +139,10 @@ function mergeProxySection(modSection: Section, baseSection: Section): { mergedS
   const modProxyNames = new Set(getProxyNames(modSection));
 
   for (const entry of baseSection.entries) {
-    if (entry.type === "entry" && !PRESERVED_PROXY_NAMES.includes(entry.name || "")) {
+    if (
+      entry.type === "entry" &&
+      !PRESERVED_PROXY_NAMES.includes(entry.name || "")
+    ) {
       result.push(entry);
       if (modProxyNames.has(entry.name || "")) {
         unchanged++;
@@ -142,10 +171,13 @@ function mergeProxySection(modSection: Section, baseSection: Section): { mergedS
   };
 }
 
-function mergeProxyGroupSection(modSection: Section, baseSection: Section): { mergedSection: Section; change: SectionChange } {
+function mergeProxyGroupSection(
+  modSection: Section,
+  baseSection: Section,
+): { mergedSection: Section; change: SectionChange } {
   const result: Entry[] = [];
   let added = 0;
-  let removed = 0;
+  const removed = 0;
   let unchanged = 0;
 
   // Get available proxy names from base config's Proxy Group section
@@ -196,7 +228,7 @@ function mergeProxyGroupSection(modSection: Section, baseSection: Section): { me
   }
 
   // Add any new groups from base that weren't in mod
-  for (const [name, entry] of baseGroups) {
+  for (const entry of baseGroups.values()) {
     result.push(entry);
     added++;
   }
@@ -207,14 +239,19 @@ function mergeProxyGroupSection(modSection: Section, baseSection: Section): { me
   };
 }
 
-function mergeGenericSection(modSection: Section, baseSection: Section): { mergedSection: Section; change: SectionChange } {
+function mergeGenericSection(
+  modSection: Section,
+  baseSection: Section,
+): { mergedSection: Section; change: SectionChange } {
   const result: Entry[] = [];
   let added = 0;
   let removed = 0;
   let unchanged = 0;
 
   // Check if mod section has custom markers
-  const hasCustomBlock = modSection.entries.some((e) => e.type === "custom-start");
+  const hasCustomBlock = modSection.entries.some(
+    (e) => e.type === "custom-start",
+  );
 
   if (hasCustomBlock) {
     // Keep custom entries, sync the rest from base

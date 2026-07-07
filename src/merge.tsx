@@ -38,7 +38,9 @@ export default function Command() {
 
       // Validate paths
       if (!baseConfigPath || !modConfigPath) {
-        setError("Please configure the config file paths in extension preferences.");
+        setError(
+          "Please configure the config file paths in extension preferences.",
+        );
         setIsLoading(false);
         return;
       }
@@ -136,7 +138,10 @@ export default function Command() {
         markdown={`# Error\n\n${error}`}
         actions={
           <ActionPanel>
-            <Action title="Open Preferences" onAction={openExtensionPreferences} />
+            <Action
+              title="Open Preferences"
+              onAction={openExtensionPreferences}
+            />
             <Action title="Retry" onAction={loadAndPreviewMerge} />
           </ActionPanel>
         }
@@ -148,7 +153,9 @@ export default function Command() {
     return <Detail isLoading={true} markdown="Loading configurations..." />;
   }
 
-  const diffSummary = mergeResult ? generateDiffSummary(mergeResult.changes) : "";
+  const diffSummary = mergeResult
+    ? generateDiffSummary(mergeResult.changes)
+    : "";
 
   const markdown = `# Surge Config Merge Preview
 
@@ -188,14 +195,25 @@ ${diffSummary}
                 markdown={`# Merged Configuration Preview\n\n\`\`\`ini\n${mergeResult?.output || ""}\n\`\`\``}
                 actions={
                   <ActionPanel>
-                    <Action.CopyToClipboard title="Copy to Clipboard" content={mergeResult?.output || ""} />
+                    <Action.CopyToClipboard
+                      title="Copy to Clipboard"
+                      content={mergeResult?.output || ""}
+                    />
                   </ActionPanel>
                 }
               />
             }
           />
-          <Action title="Reload" onAction={loadAndPreviewMerge} shortcut={{ modifiers: ["cmd"], key: "r" }} />
-          <Action title="Open Preferences" onAction={openExtensionPreferences} shortcut={{ modifiers: ["cmd"], key: "," }} />
+          <Action
+            title="Reload"
+            onAction={loadAndPreviewMerge}
+            shortcut={{ modifiers: ["cmd"], key: "r" }}
+          />
+          <Action
+            title="Open Preferences"
+            onAction={openExtensionPreferences}
+            shortcut={{ modifiers: ["cmd"], key: "," }}
+          />
         </ActionPanel>
       }
     />

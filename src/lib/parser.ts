@@ -127,7 +127,10 @@ export function serializeConfig(config: SurgeConfig): string {
   return lines.join("\n");
 }
 
-export function getSection(config: SurgeConfig, name: string): Section | undefined {
+export function getSection(
+  config: SurgeConfig,
+  name: string,
+): Section | undefined {
   return config.sections.find((s) => s.name === name);
 }
 
@@ -138,9 +141,13 @@ export function getProxyNames(section: Section): string[] {
 }
 
 export function getCustomEntries(section: Section): Entry[] {
-  return section.entries.filter((e) => e.isCustom || e.type === "custom-start" || e.type === "custom-end");
+  return section.entries.filter(
+    (e) => e.isCustom || e.type === "custom-start" || e.type === "custom-end",
+  );
 }
 
 export function getNonCustomEntries(section: Section): Entry[] {
-  return section.entries.filter((e) => !e.isCustom && e.type !== "custom-start" && e.type !== "custom-end");
+  return section.entries.filter(
+    (e) => !e.isCustom && e.type !== "custom-start" && e.type !== "custom-end",
+  );
 }

@@ -1,4 +1,10 @@
-export type EntryType = "comment" | "entry" | "blank" | "custom-start" | "custom-end" | "header";
+export type EntryType =
+  | "comment"
+  | "entry"
+  | "blank"
+  | "custom-start"
+  | "custom-end"
+  | "header";
 
 export interface Entry {
   type: EntryType;
